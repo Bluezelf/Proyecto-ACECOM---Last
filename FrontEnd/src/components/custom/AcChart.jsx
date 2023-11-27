@@ -3,27 +3,6 @@ import * as echarts from "echarts";
 
 const AcChart = () => {
   useEffect(() => {
-    const month = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const value = [30, 50, 60, 80, 70, 50, 39, 60, 100, 50, 60, 80];
-
-    const info = month.map((month, index) => ({
-      name: month,
-      value: value[index],
-    }));
-
     var myChart = echarts.init(document.getElementById("chart"));
 
     var app = {};
@@ -38,7 +17,7 @@ const AcChart = () => {
       }
       return res;
     })();
-    
+
     const data = (function () {
       let res = [];
       let len = 10;
@@ -127,7 +106,7 @@ const AcChart = () => {
       data.push(Math.round(Math.random() * 1000));
       categories.shift();
       categories.push(axisData);
-   
+
       myChart.setOption({
         xAxis: [
           {
