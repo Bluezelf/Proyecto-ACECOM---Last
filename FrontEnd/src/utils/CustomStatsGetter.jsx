@@ -2,13 +2,16 @@ import { FaTemperatureHalf} from "react-icons/fa6";
 import { GiChemicalTank, GiImpactPoint, GiPoisonGas } from "react-icons/gi";
 import { MdDateRange } from "react-icons/md";
 import { RiWaterPercentLine } from "react-icons/ri";
+import CustomSocketHook from "./CustomSocketHook";
 
-const AirQualityDetails = () => {
-  const details = [
+const CustomStatsGetter = () => {
+
+  const statsData = CustomSocketHook()
+  const stats = [
     {
       icon: <FaTemperatureHalf className="text-5xl" />,
       label: "Temp",
-      value: 25 ,
+      value: statsData[0] ,
       unit: "°C"
     },
     {
@@ -19,8 +22,8 @@ const AirQualityDetails = () => {
     },
     {
       icon: <RiWaterPercentLine className="text-5xl" />,
-      label: "Humity",
-      value: 75,
+      label: "Humidity",
+      value: statsData[2],
       unit: "%"
     },
     {
@@ -42,7 +45,7 @@ const AirQualityDetails = () => {
       unit: "torr"
     },
   ];
-  return details
+  return stats
 };
 
-export default AirQualityDetails;
+export default CustomStatsGetter;

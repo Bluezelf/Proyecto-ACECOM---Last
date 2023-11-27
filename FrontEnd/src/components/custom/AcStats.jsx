@@ -21,7 +21,7 @@ AcStats.propTypes = {
   stats: PropTypes.arrayOf(
     PropTypes.shape({
       icon: PropTypes.element.isRequired,
-      label: PropTypes.string.isRequired,
+      label: PropTypes.string,
       value: PropTypes.number.isRequired,
     })
   ).isRequired,
