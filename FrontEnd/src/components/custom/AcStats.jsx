@@ -6,11 +6,11 @@ const AcStats = ({ stats }) => {
       {stats.map((stat, index) => (
         <button
           key={index}
-          className={`flex flex-col font-semibold text-sm items-center gap-1 justify-between md:px-5 md:py-2 lg:px-0 lg:py-3 rounded-xl drop-shadow-lg bg-acSmoke dark:bg-acGray`}
+          className={`flex flex-col text-sm items-center gap-1 justify-between md:px-5 md:py-2 lg:px-0 lg:py-3 rounded-xl drop-shadow-lg bg-acSmoke dark:bg-acGray`}
         >
-          <span>{stat.label}</span>
+          <span className="font-light">{stat.label}</span>
           <span>{stat.icon}</span>
-          <span>{stat.value + " " + stat.unit}</span>
+          <span className="text-lg font-bold">{stat.value + " " + stat.unit}</span>
         </button>
       ))}
     </div>

@@ -1,4 +1,4 @@
-import {AcStats , AcTab} from "../custom/index"
+import {AcStats } from "../custom/index"
 import CustomStatsGetter from "../../utils/CustomStatsGetter";
 
 const Details = () => {

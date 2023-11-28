@@ -1,6 +1,7 @@
 import { Details, Graphic, AirQuality} from "./components/layout"
-import "./App.css";
 import { AcDarkMode } from "./components/custom";
+import "./App.css";
+
 
 function App() {
 

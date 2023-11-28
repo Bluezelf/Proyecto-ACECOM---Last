@@ -1,132 +1,159 @@
-import { useEffect } from "react";
-import * as echarts from "echarts";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState, useRef } from 'react';
+import CustomSocketHook from '../../utils/CustomSocketHook';
+import * as echarts from 'echarts';
 
+// configuracion de la grafica (segun la documentacion de echarts)
+const getChartOption = (xAxis, series) => {
+	return {
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: {
+				type: 'cross',
+				label: {
+					backgroundColor: '#283b56',
+				},
+			},
+		},
+		toolbox: {
+			show: true,
+			feature: {
+				saveAsImage: {},
+			},
+		},
+		dataZoom: {
+			show: false,
+			start: 0,
+			end: 100,
+		},
+		grid: {
+			width: '90%',
+			left: '5%',
+			top: '12%',
+			bottom: '10%',
+		},
+		xAxis: [
+			{
+				type: 'category',
+				boundaryGap: true,
+				data: xAxis,
+				axisLabel: {
+					fontWeight: 'bold',
+				},
+			},
+		],
+		yAxis: [
+			{
+				type: 'value',
+				scale: true,
+				max: 500,
+				min: 0,
+				boundaryGap: [0.2, 0.2],
+				splitLine: {
+					show: false,
+				},
+				axisLabel: {
+					fontWeight: 'bold',
+				},
+			},
+		],
+		series: [
+			{
+				name: 'Air quality',
+				type: 'bar',
+				barWidth: 30,
+				data: series,
+				symbolSize: '7',
+				lineStyle: {
+					color: '#101D42',
+					width: 1,
+				},
+			},
+		],
+	};
+};
+
+// componente de la grafica
 const AcChart = () => {
-  useEffect(() => {
-    var myChart = echarts.init(document.getElementById("chart"));
+	const { airquality } = CustomSocketHook(); // custom hook para recibir datos del socket
 
-    var app = {};
+	const [dataSeries, setDataSeries] = useState([]); // barra de la grafica
+	const [dataXAxis, setDataXAxis] = useState([]); // datos de la grafica (eje X)
 
-    const categories = (function () {
-      let now = new Date();
-      let res = [];
-      let len = 10;
-      while (len--) {
-        res.unshift(now.toLocaleTimeString().replace(/^\D*/, ""));
-        now = new Date(+now - 2000);
-      }
-      return res;
-    })();
+	const myChartRef = useRef(null); // referencia persistente a la grafica
 
-    const data = (function () {
-      let res = [];
-      let len = 10;
-      while (len--) {
-        res.push(Math.round(Math.random() * 1000));
-      }
-      return res;
-    })();
+	// obtencion de la hora actual
+	const getCurrentTime = () => {
+		const options = { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+		return new Date().toLocaleTimeString([], options);
+	};
 
-    myChart.setOption({
-      tooltip: {
-        trigger: "axis",
-        axisPointer: {
-          type: "cross",
-          label: {
-            backgroundColor: "#283b56",
-          },
-        },
-      },
-      toolbox: {
-        show: true,
-        feature: {
-          saveAsImage: {},
-        },
-      },
-      dataZoom: {
-        show: false,
-        start: 0,
-        end: 100,
-      },
-      xAxis: [
-        {
-          type: "category",
-          boundaryGap: true,
-          data: categories,
-          axisLabel: {
-            textStyle: {
-              fontWeight: "bold",
-            },
-          },
-        },
-      ],
-      yAxis: [
-        {
-          type: "value",
-          scale: true,
-          max: 1200,
-          min: 0,
-          boundaryGap: [0.2, 0.2],
-          splitLine: {
-            show: false,
-          },
-          axisLabel: {
-            textStyle: {
-              fontWeight: "bold",
-            },
-          },
-        },
-      ],
-      series: [
-        {
-          name: "Air quality",
-          type: "bar",
-          barWidth: 30,
-          data: data,
-          symbolSize: "7",
-          lineStyle: {
-            color: "#101D42",
-            width: 1,
-          },
-        },
-      ],
-      grid: {
-        width: "90%",
-        left: "5%",
-        top: "12%",
-        bottom: "10%",
-      },
-    });
+	// inicializacion de grafica (primer renderizado)
+	useEffect(() => {
+		// inicializacion de grafica
+		myChartRef.current = myChartRef.current ?? echarts.init(document.getElementById('chart'));
 
-    app.count = 11;
+		// datos de prueba
+		const mockData = {
+			dataSeries: [280, 300, 350, 320, 290, 360, 400, 390, 450, 350],
+			dataXAxis: [
+				'12:00:00',
+				'12:00:30',
+				'12:01:00',
+				'12:01:30',
+				'12:02:00',
+				'12:02:30',
+				'12:03:00',
+				'12:03:30',
+				'12:04:00',
+				'12:04:30',
+			],
+		};
 
-    setInterval(function () {
-      let axisData = new Date().toLocaleTimeString().replace(/^\D*/, "");
-      data.shift();
-      data.push(Math.round(Math.random() * 1000));
-      categories.shift();
-      categories.push(axisData);
+		// configuracion de los datos de prueba
+		setDataSeries(mockData.dataSeries);
+		setDataXAxis(mockData.dataXAxis);
 
-      myChart.setOption({
-        xAxis: [
-          {
-            data: categories,
-          },
-        ],
-        series: [
-          {
-            data: data,
-          },
-        ],
-      });
-    }, 2100);
+		// redimension de la grafica
+		const handleResize = () => {
+			myChartRef.current.resize();
+		};
 
-    window.addEventListener("resize", () => {
-      myChart.resize();
-    });
-  }, []);
+		// evento de redimension de la grafica
+		window.addEventListener('resize', handleResize);
 
-  return <div id="chart" className="w-full h-full" />;
+		// limpieza de la grafica
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
+	}, []);
+
+	// recepion de datos
+	useEffect(() => {
+		if (airquality === null) return;
+
+		// actualizacion de datos de las barras
+		const newDataSeries = [...dataSeries.slice(1), airquality];
+		setDataSeries(newDataSeries);
+
+		// actualizacion de eje X
+		const newDataXAxis = [...dataXAxis.slice(1), getCurrentTime()];
+		setDataXAxis(newDataXAxis);
+	}, [airquality]);
+
+	// actualizacion de grafica
+	useEffect(() => {
+		if (myChartRef.current === null) return;
+
+		// configuracion de la grafica
+		const options = getChartOption(dataXAxis, dataSeries);
+
+		// actualizacion de la grafica
+		myChartRef.current.setOption(options);
+	}, [dataSeries]);
+
+	// renderizado de la grafica
+	return <div id="chart" className="w-full h-full" />;
 };
 
 export default AcChart;

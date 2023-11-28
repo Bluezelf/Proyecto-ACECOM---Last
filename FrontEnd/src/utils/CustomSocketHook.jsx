@@ -32,7 +32,7 @@ const CustomSocketHook = () => {
         };
     }, []);
 
-    return [temperature, airquality, humidity, date];
+    return {temperature, airquality, humidity, date};
 };
 
 export default CustomSocketHook;
