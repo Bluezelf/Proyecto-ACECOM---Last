@@ -30,6 +30,7 @@ export default {
         acRed: "#af0505",
         acGreen: "#42a548",
         acYellow: "#dfb213",
+        acOrange: "#de691b"
       },
       animation: {
         "spin-slow": "spin 5s linear infinite",

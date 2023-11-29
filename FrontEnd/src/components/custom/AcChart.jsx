@@ -64,6 +64,23 @@ const getChartOption = (xAxis, series) => {
 				barWidth: 30,
 				data: series,
 				symbolSize: '7',
+				itemStyle: {
+				normal: {
+					color: function(params) {
+					// Cambiar el color según el valor de la data
+					var value = params.data;
+					if (value < 200) {
+						return '#42a548';
+					} else if (value < 300) {
+						return '#dfb213';
+					} else if (value < 400) {
+						return '#de691b';
+					} else {
+						return '#af0505';
+					}
+					},
+					},
+				},
 				lineStyle: {
 					color: '#101D42',
 					width: 1,
@@ -78,7 +95,7 @@ const AcChart = () => {
 	const { airquality } = CustomSocketHook(); // custom hook para recibir datos del socket
 
 	const [dataSeries, setDataSeries] = useState([]); // barra de la grafica
-	const [dataXAxis, setDataXAxis] = useState([]); // datos de la grafica (eje X)
+	const [dataXAxis, setDataXAxis] = useState([]); // datos del eje x
 
 	const myChartRef = useRef(null); // referencia persistente a la grafica
 
@@ -152,7 +169,6 @@ const AcChart = () => {
 		myChartRef.current.setOption(options);
 	}, [dataSeries]);
 
-	// renderizado de la grafica
 	return <div id="chart" className="w-full h-full" />;
 };
 

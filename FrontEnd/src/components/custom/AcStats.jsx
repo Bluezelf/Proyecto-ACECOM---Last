@@ -22,7 +22,7 @@ AcStats.propTypes = {
     PropTypes.shape({
       icon: PropTypes.element.isRequired,
       label: PropTypes.string.isRequired,
-      value: PropTypes.number,
+      value: PropTypes.any,
     })
   ).isRequired,
 };

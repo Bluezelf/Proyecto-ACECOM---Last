@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 
-const serverUrl = 'http://localhost:3000';
-const socket = io(serverUrl);
-
 const CustomSocketHook = () => {
+    
+    const serverUrl = 'http://localhost:3000';
+    const socket = io(serverUrl);
+
     const [temperature, setTemperature] = useState(null);
     const [airquality, setAirQuality] = useState(null);
     const [humidity, setHumidity] = useState(null);

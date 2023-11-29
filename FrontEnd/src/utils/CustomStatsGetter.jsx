@@ -2,10 +2,9 @@ import { FaTemperatureHalf } from 'react-icons/fa6';
 import { GiChemicalTank, GiImpactPoint, GiPoisonGas } from 'react-icons/gi';
 import { MdDateRange } from 'react-icons/md';
 import { RiWaterPercentLine } from 'react-icons/ri';
-import CustomSocketHook from './CustomSocketHook';
 
-const CustomStatsGetter = () => {
-	const { temperature, humidity } = CustomSocketHook();
+const CustomStatsGetter = (temperature, humidity, date) => {
+	
 	const stats = [
 		{
 			icon: <FaTemperatureHalf className="text-5xl" />,
@@ -28,8 +27,8 @@ const CustomStatsGetter = () => {
 		{
 			icon: <MdDateRange className="text-5xl" />,
 			label: 'Date',
-			value: 5,
-			unit: 'Nov',
+			value: date,
+			unit: '',
 		},
 		{
 			icon: <GiPoisonGas className="text-5xl" />,
@@ -44,6 +43,7 @@ const CustomStatsGetter = () => {
 			unit: 'torr',
 		},
 	];
+
 	return stats;
 };
 
