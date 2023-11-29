@@ -1,7 +1,6 @@
 const express = require('express');
-const { createServer } = require('http');  // Change this line
-const { join } = require('path');  // Change this line
-const { Server } = require('socket.io');  // Change this line
+const { createServer } = require('http');
+const { Server } = require('socket.io');
 const { io } = require('socket.io-client')
 
 const app = express();
